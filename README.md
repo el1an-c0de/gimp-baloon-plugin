@@ -48,17 +48,17 @@ Al confirmar, crea una capa de texto real de GIMP (no rasterizada, sigue siendo 
    (por ejemplo: `C:\Users\<usuario>\AppData\Roaming\GIMP\3.2\plug-ins\add_balloon\add_balloon.py`)
 3. Reiniciar GIMP.
 
-### Uso
-En ambos casos:
-- Seleccionar zona, en el menú **Select → Add Balloon...** 
-- Seleccionar zona, **clic derecho → Select → Add Balloon...** 
-- Puedes crear un Keyboard Shortcut, **Menú Edit → Keyboard Shortcut → Buscar Add Balloons → Agregar combinación de teclas** 
-
 aparece después de reiniciar GIMP, con una selección activa en la imagen.
 
 ### Plantillas
 
 Las plantillas guardadas se persisten en `add_balloon_presets.json`, en la misma carpeta que `add_balloon.py`. Se crea solo al guardar la primera plantilla desde el diálogo del plugin.
+
+## Uso
+En ambos casos:
+- Seleccionar zona, en el menú **Select → Add Balloon...** 
+- Seleccionar zona, **clic derecho → Select → Add Balloon...** 
+- Puedes crear un Keyboard Shortcut, **Menú Edit → Keyboard Shortcut → Buscar Add Balloons → Agregar combinación de teclas** 
 
 ## Créditos
 
