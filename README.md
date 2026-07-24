@@ -1,68 +1,70 @@
-# Add baloon plugin
-This is a gimp plugin to create manga balloon easy.
+# Add Balloon — plugin de GIMP
 
-## How to install
+Plugin de GIMP 3.x que agrega texto centrado (con wrap automático, fuente, color y contorno configurables) dentro de una selección activa — pensado para poner diálogos/globos de texto sobre páginas de manga o cómic.
 
-### For Gimp 2.99.* and 3.*
-1) download the folder add_baloon
-2) Inside GIMP program, go to Edit -> Preferences -> Folders -> Plug-Ins and see the folder/path listed.
-3) Copy/Move the add_balloon folder from step 1 to one of one of those folders.
-4) If you're on Linux, you'll have to browse to the file and right click on it, the Properties, Permissions Tab, Allow Execute as Program (to make it executable). Ex. chmod +x add_balloon/add_balloon.py
-5) Restart GIMP.
-6) And now plug-in is active for use.
+Este proyecto es un **fork** de [gimp-baloon-plugin](https://github.com/nicolalandro/gimp-baloon-plugin) de [nicolalandro](https://github.com/nicolalandro). El plugin original estaba escrito contra una API de desarrollo temprana de GIMP 3.0 que cambió antes del release estable; este fork lo actualiza para funcionar con la API estable de **GIMP 3.2** y agrega funcionalidades nuevas (plantillas, contorno de texto, espaciado de línea dinámico, selector de fuente/color, etc.).
 
-Linux steps example
-```
-cd ~/.var/app/org.gimp.GIMP/config/GIMP/2.99/plug-ins
-mkdir add_balloon
-cd add_balloon
-wget https://raw.githubusercontent.com/nicolalandro/gimp-baloon-plugin/master/add_balloon/add_balloon.py
-chmod +x new_baloon_text.py
-# run gimp
-```
+La idea de simplificar el flujo de trabajo de rotulado (posicionar, alinear y gestionar estilos de texto) está inspirada en [TyperTools](https://swirt.github.io/typertools/) — una extensión de Photoshop diseñada para rotulistas ("typesetters") que trabajan con guiones de manga y cómics.
 
-### For Other Gimp version
-1) Download new_baloon_text.py file
-2) Inside GIMP program, go to Edit -> Preferences -> Folders -> Plug-Ins and see the folder/path listed.
-3) Copy/Move the .py file from step 1 to one of one of those folders.
-4) If you're on Linux, you'll have to browse to the file and right click on it, the Properties, Permissions Tab, Allow Execute as Program (to make it executable). Ex. chmod +x new_baloon_text.py
-5) Restart GIMP.
-6) And now plug-in is active for use.
+## Qué hace
 
+Menú: **Select → Add Balloon...** (requiere una selección activa en la imagen).
 
-Linux steps (For GIMP 2.10):
-```
-cd ~/.config/GIMP/2.10/plug-ins
-wget https://raw.githubusercontent.com/nicolalandro/gimp-baloon-plugin/master/new_baloon_text.py 
-chmod +x new_baloon_text.py  
-# run gimp
-```
+Al ejecutarlo se abre un diálogo con:
 
-## How to use
+- Cuadro de texto, con wrap automático dentro de la selección.
+- Selector de fuente.
+- Selector de color de texto.
+- Contorno (checkbox) + color de contorno + grosor.
+- Plantillas ("Título", "Subtítulo", etc.) que guardan fuente, tamaño, color y contorno, con botones para guardar y eliminar.
 
-## Python3 version
-* select an area
-![select area](imgs/python3/demo1.png)
+Al confirmar, crea una capa de texto real de GIMP (no rasterizada, sigue siendo editable), centrada horizontal y verticalmente dentro de la selección, sin fondo ni grupo de capas.
 
-* go to select Add baloon...
-![add baloon](imgs/python3/demo2.png)
+## Requisitos
 
-* insert text and specify font and font size
-![insert text](imgs/python3/demo3.png)
+- GIMP **3.2** o superior (usa la API estable de Python-Fu de GIMP 3.x).
 
-* here the results
-![result](imgs/python3/demo4.png)
+## Instalación
 
-## Python2 version
-* select an area
-![select area](imgs/python2/demo1.png)
+### Linux (GIMP vía Flatpak)
 
-* go to select Add baloon...
-![add baloon](imgs/python2/demo2.png)
+1. Copiar la carpeta `add_balloon` (con `add_balloon.py` adentro) a:
+   ```
+   ~/.config/GIMP/3.2/plug-ins/add_balloon/add_balloon.py
+   ```
+2. Dar permiso de ejecución:
+   ```bash
+   chmod +x ~/.config/GIMP/3.2/plug-ins/add_balloon/add_balloon.py
+   ```
+3. Reiniciar GIMP.
 
-* insert text and specify font and font size
-![insert text](imgs/python2/demo3.png)
+### Windows
 
-* here the results
-![result](imgs/python2/demo4.png)
+1. Abrir GIMP una vez (para que genere `%APPDATA%\GIMP\3.2\`) y cerrarlo.
+2. Copiar `add_balloon.py` a:
+   ```
+   %APPDATA%\GIMP\3.2\plug-ins\add_balloon\add_balloon.py
+   ```
+   (por ejemplo: `C:\Users\<usuario>\AppData\Roaming\GIMP\3.2\plug-ins\add_balloon\add_balloon.py`)
+3. Reiniciar GIMP.
 
+### Uso
+En ambos casos:
+- Seleccionar zona, en el menú **Select → Add Balloon...** 
+- Seleccionar zona, **clic derecho → Select → Add Balloon...** 
+- Puedes crear un Keyboard Shortcut, **Menú Edit → Keyboard Shortcut → Buscar Add Balloons → Agregar combinación de teclas** 
+
+aparece después de reiniciar GIMP, con una selección activa en la imagen.
+
+### Plantillas
+
+Las plantillas guardadas se persisten en `add_balloon_presets.json`, en la misma carpeta que `add_balloon.py`. Se crea solo al guardar la primera plantilla desde el diálogo del plugin.
+
+## Créditos
+
+- Proyecto original: [nicolalandro/gimp-baloon-plugin](https://github.com/nicolalandro/gimp-baloon-plugin)
+- Inspiración de flujo de trabajo: [TyperTools](https://swirt.github.io/typertools/) (extensión de Photoshop)
+
+## Licencia
+
+El proyecto original no declara una licencia. Mientras eso no cambie, este fork tampoco incluye una licencia explícita.
