@@ -16,9 +16,9 @@ import json
 import os
 import sys
 
-textdomain = 'gimp30-std-plug-ins'
-gettext.bindtextdomain(textdomain, Gimp.locale_directory())
-# gettext.bind_textdomain_codeset(textdomain, 'UTF-8')
+textdomain = 'add_balloon'
+locale_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'locale')
+gettext.bindtextdomain(textdomain, locale_dir)
 gettext.textdomain(textdomain)
 _ = gettext.gettext
 def N_(message): return message
@@ -40,7 +40,7 @@ def save_presets(presets):
 
 class AddBalloon(Gimp.PlugIn):
     def do_set_i18n(self, procname):
-        return True, textdomain, None
+        return True, textdomain, locale_dir
 
     def do_query_procedures(self):
         return [ "plug-in-add-balloon" ]
@@ -117,7 +117,7 @@ class AddBalloon(Gimp.PlugIn):
             box.show()
 
             # Label text content
-            label = Gtk.Label(label='Text:')
+            label = Gtk.Label(label=_('Text:'))
             box.pack_start(label, False, False, 1)
             label.show()
 
@@ -147,7 +147,7 @@ class AddBalloon(Gimp.PlugIn):
             box.pack_start(color_box, False, False, 1)
             color_box.show()
 
-            color_label = Gtk.Label(label='Color:')
+            color_label = Gtk.Label(label=_('Color:'))
             color_box.pack_start(color_label, False, False, 1)
             color_label.show()
 
@@ -161,7 +161,7 @@ class AddBalloon(Gimp.PlugIn):
             box.pack_start(outline_box, False, False, 1)
             outline_box.show()
 
-            outline_check = Gtk.CheckButton(label=_("Contorno"))
+            outline_check = Gtk.CheckButton(label=_("Outline"))
             outline_box.pack_start(outline_check, False, False, 1)
             outline_check.show()
 
@@ -171,7 +171,7 @@ class AddBalloon(Gimp.PlugIn):
             outline_box.pack_start(outline_color_button, False, False, 1)
             outline_color_button.show()
 
-            outline_width_label = Gtk.Label(label=_("Grosor:"))
+            outline_width_label = Gtk.Label(label=_("Width:"))
             outline_box.pack_start(outline_width_label, False, False, 1)
             outline_width_label.show()
 
@@ -250,7 +250,7 @@ class AddBalloon(Gimp.PlugIn):
             box.pack_start(preset_box, False, False, 1)
             preset_box.show()
 
-            preset_label = Gtk.Label(label='Plantilla:')
+            preset_label = Gtk.Label(label=_('Template:'))
             preset_box.pack_start(preset_label, False, False, 1)
             preset_label.show()
 
@@ -260,7 +260,7 @@ class AddBalloon(Gimp.PlugIn):
             preset_box.pack_start(preset_combo, True, True, 1)
             preset_combo.show()
 
-            delete_preset_button = Gtk.Button(label=_("Eliminar"))
+            delete_preset_button = Gtk.Button(label=_("Delete"))
             delete_preset_button.connect('clicked', on_delete_preset)
             preset_box.pack_start(delete_preset_button, False, False, 1)
             delete_preset_button.show()
@@ -270,11 +270,11 @@ class AddBalloon(Gimp.PlugIn):
             save_preset_box.show()
 
             preset_name_entry = Gtk.Entry()
-            preset_name_entry.set_placeholder_text(_("Nombre de la plantilla"))
+            preset_name_entry.set_placeholder_text(_("Template name"))
             save_preset_box.pack_start(preset_name_entry, True, True, 1)
             preset_name_entry.show()
 
-            save_preset_button = Gtk.Button(label=_("Guardar plantilla"))
+            save_preset_button = Gtk.Button(label=_("Save template"))
             save_preset_button.connect('clicked', on_save_preset)
             save_preset_box.pack_start(save_preset_button, False, False, 1)
             save_preset_button.show()
@@ -314,7 +314,6 @@ class AddBalloon(Gimp.PlugIn):
 
                     text_layer = Gimp.TextLayer.new(image, text, font, font_size, Gimp.Unit.pixel())
                     image.insert_layer(text_layer, layer.get_parent(), position)
-                    text_layer.set_line_spacing(font_size)
 
                     # set text color
                     rgba = color_button.get_rgba()
@@ -347,10 +346,13 @@ class AddBalloon(Gimp.PlugIn):
                     image.set_selected_layers([text_layer])
                     image.autocrop_selected_layers(text_layer)
 
-                    # center text layer inside the selection
+                    # center text layer inside the selection. Must be an
+                    # absolute move: transform_translate() adds a delta to
+                    # the layer's current position (which is no longer (0,0)
+                    # after autocrop), so it would overshoot the center.
                     cx = (x1 + x2)/2 - text_layer.get_width()/2
                     cy = (y1 + y2)/2 - text_layer.get_height()/2
-                    text_layer.transform_translate(cx, cy)
+                    text_layer.set_offsets(round(cx), round(cy))
 
 
                     dialog.destroy()
